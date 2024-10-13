@@ -12,5 +12,5 @@ import lombok.*;
 public class Breed {
     private String name;
     private int averageLifespan;
-    private boolean isHypoalergenic;
+    private boolean isHypoallergenic;
 }
