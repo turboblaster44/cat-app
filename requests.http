@@ -1,0 +1,23 @@
+### Get all owners
+GET http://localhost:9080/cat-app/api/owners
+
+### Get actual owner
+GET http://localhost:9080/cat-app/api/owners/d80ecfee-a46f-4d05-b02c-8e9664b5982f
+
+### Get non existing owner
+GET http://localhost:9080/cat-app/api/owners/7ab007bf-7a04-4223-b5b0-760db8fff539
+
+### create new owner
+PUT http://localhost:9080/cat-app/api/owners/c66de235-cb3d-4880-8c18-43e86d0fac75
+Content-Type: application/json
+
+{
+  "name": "matidon",
+  "login": "turbomati",
+  "birthDate": "1990-01-01",
+  "salary": "10000.0",
+  "password": "Shhhh!!!Quiet"
+}
+
+### Delete
+DELETE http://localhost:9080/cat-app/api/owners/c66de235-cb3d-4880-8c18-43e86d0fac75
