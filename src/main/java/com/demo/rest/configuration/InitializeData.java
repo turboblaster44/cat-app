@@ -1,5 +1,6 @@
 package com.demo.rest.configuration;
 
+import com.demo.rest.models.image.controller.service.ImageService;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.service.OwnerService;
 import jakarta.servlet.ServletContextEvent;
@@ -7,18 +8,46 @@ import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.UUID;
 
 @WebListener
 public class InitializeData implements ServletContextListener {
-    OwnerService ownerService;
-
+    private OwnerService ownerService;
+    private ImageService imageService;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
+        Path imageDir = Paths.get(event.getServletContext().getInitParameter("imageDir"));
         ownerService = (OwnerService) event.getServletContext().getAttribute("ownerService");
+        imageService = (ImageService) event.getServletContext().getAttribute("imageService");
+        initImageDir(imageDir);
         init();
+    }
+
+    private void initImageDir(Path imageDir) {
+        try {
+            Files.createDirectories(imageDir);
+            System.out.println("directory created: " + imageDir.toAbsolutePath());
+            //clear directory
+            Files.walk(imageDir)
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        try {
+                            Files.delete(file);
+                        } catch (IOException e) {
+                            System.err.println("Could not delete file: " + file);
+                        }
+                    });
+
+        } catch (IOException e) {
+            throw new IllegalStateException("exception when creating picture directory", e);
+        }
     }
 
     /**
@@ -56,9 +85,20 @@ public class InitializeData implements ServletContextListener {
                 .birthDate(LocalDate.now())
                 .build();
 
+        imageService.createImage(oskar.getId(), getImageBytes(oskar.getId()));
+        imageService.createImage(janek.getId(), getImageBytes(janek.getId()));
+        imageService.createImage(gogi.getId(), getImageBytes(gogi.getId()));
+        imageService.createImage(pszemo.getId(), getImageBytes(pszemo.getId()));
+
+
         ownerService.create(oskar);
         ownerService.create(janek);
         ownerService.create(gogi);
         ownerService.create(pszemo);
+    }
+
+    private byte[] getImageBytes(UUID id) throws IOException {
+        Path resPath = Paths.get("C:\\Users\\micha\\OneDrive\\Pulpit\\GIT REPOS\\cat-app\\src\\main\\res\\" + id.toString() + ".png").normalize();
+        return Files.readAllBytes(resPath);
     }
 }

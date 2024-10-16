@@ -1,6 +1,8 @@
 package com.demo.rest.configuration;
 
 import com.demo.rest.datastore.Datastore;
+import com.demo.rest.models.image.controller.repository.ImageRepository;
+import com.demo.rest.models.image.controller.service.ImageService;
 import com.demo.rest.models.owner.repository.api.OwnerRepository;
 import com.demo.rest.models.owner.repository.memory.OwnerInMemoryRepository;
 import com.demo.rest.models.owner.service.OwnerService;
@@ -15,12 +17,10 @@ public class CreateServices implements ServletContextListener {
         Datastore dataSource = (Datastore) event.getServletContext().getAttribute("datasource");
 
         OwnerRepository ownerRepository = new OwnerInMemoryRepository(dataSource);
+        ImageRepository imageRepository = new ImageRepository(dataSource);
 
-        // [pictures-in-files] get rid of
-        ServletContext context = event.getServletContext();
-//        String pictureDirPath = context.getInitParameter("pictureDirectory");
-//
         event.getServletContext().setAttribute("ownerService", new OwnerService(ownerRepository));
+        event.getServletContext().setAttribute("imageService", new ImageService(imageRepository));
 
     }
 

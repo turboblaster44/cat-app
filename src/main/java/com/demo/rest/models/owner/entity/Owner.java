@@ -26,8 +26,4 @@ public class Owner implements Serializable {
     private List<Cat> cats;
 
     private String login;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private byte[] picture;
 }

@@ -1,5 +1,6 @@
 package com.demo.rest.controller.servlet;
 
+import com.demo.rest.models.image.controller.api.ImageController;
 import com.demo.rest.models.owner.controller.api.OwnerController;
 import com.demo.rest.models.owner.dto.PutOwnerRequest;
 import jakarta.json.bind.Jsonb;
@@ -10,8 +11,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
+import java.awt.*;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +28,7 @@ import java.util.regex.Pattern;
 public class ApiServlet extends HttpServlet {
 
     private OwnerController ownerController;
+    private ImageController imageController;
 
     public class Paths {
         public static final String API = "/api";
@@ -37,7 +43,7 @@ public class ApiServlet extends HttpServlet {
         //public static final Pattern OWNER = Pattern.compile("/owners/(%s)".formatted(UUID.pattern()));
         public static final Pattern OWNER = Pattern.compile("/owners/(%s)".formatted(UUID.pattern()));
 
-//        public static final Pattern OWNER_IMAGE = Pattern.compile("/owners/(%s)/picture".formatted(UUID.pattern()));
+        public static final Pattern IMAGE = Pattern.compile("/images/(%s)".formatted(UUID.pattern()));
 
     }
 
@@ -47,6 +53,7 @@ public class ApiServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         ownerController = (OwnerController) getServletContext().getAttribute("ownerController");
+        imageController = (ImageController) getServletContext().getAttribute("imageController");
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -64,15 +71,14 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.OWNER, path);
                 response.getWriter().write(jsonb.toJson(ownerController.getOwner(uuid)));
                 return;
+            } else if (path.matches(Patterns.IMAGE.pattern())) {
+                response.setContentType("image/png");//could be dynamic but atm we support only one format
+                UUID uuid = extractUuid(Patterns.IMAGE, path);
+                byte[] image = imageController.getImage(uuid);
+                response.setContentLength(image.length);
+                response.getOutputStream().write(image);
+                return;
             }
-//            else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
-//                response.setContentType("image/png");//could be dynamic but atm we support only one format
-//                UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-//                byte[] portrait = characterController.getCharacterPortrait(uuid);
-//                response.setContentLength(portrait.length);
-//                response.getOutputStream().write(portrait);
-//                return;
-//            }
         }
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
@@ -88,14 +94,16 @@ public class ApiServlet extends HttpServlet {
                 ownerController.putOwner(putOwnerRequest);
                 response.addHeader("Location", createUrl(request, Paths.API, "owners", uuid.toString()));
                 return;
+            } else if (path.matches(Patterns.IMAGE.pattern())) {
+                UUID uuid = extractUuid(Patterns.IMAGE, path);
+                try (InputStream is = request.getPart("image").getInputStream()) {
+                    byte[] imageBytes = is.readAllBytes();
+                    imageController.putImage(uuid, imageBytes);
+                }
+                return;
             }
-//            else if (path.matches(Patterns.CHARACTER_PORTRAIT.pattern())) {
-//                UUID uuid = extractUuid(Patterns.CHARACTER_PORTRAIT, path);
-//                characterController.putCharacterPortrait(uuid, request.getPart("portrait").getInputStream());
-//                return;
-//            }
         }
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 
     @SuppressWarnings("RedundantThrows")
@@ -108,8 +116,14 @@ public class ApiServlet extends HttpServlet {
                 UUID uuid = extractUuid(Patterns.OWNER, path);
                 ownerController.deleteOwner(uuid);
                 return;
+            } else if (path.matches(Patterns.IMAGE.pattern())) {
+                UUID uuid = extractUuid(Patterns.IMAGE, path);
+                System.out.println("in delete");
+                imageController.deleteImage(uuid);
+                return;
             }
         }
+
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
     }
 

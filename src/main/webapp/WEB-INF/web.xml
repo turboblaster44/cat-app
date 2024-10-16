@@ -6,11 +6,10 @@
          metadata-complete="false">
 
 
-    <!--  [pictures-in-files] get rid of  -->
-<!--    <context-param>-->
-<!--        <param-name>pictureDirectory</param-name>-->
-<!--        <param-value>pictureDirectory</param-value>-->
-<!--    </context-param>-->
+    <context-param>
+        <param-name>imageDir</param-name>
+        <param-value>imageDir</param-value>
+    </context-param>
 
     <listener>
         <listener-class>com.demo.rest.configuration.CreateDataSource</listener-class>
