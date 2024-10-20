@@ -31,18 +31,16 @@ public class InitializeData implements ServletContextListener {
     private final BreedService breedService;
     private final CatService catService;
     private final ImageService imageService;
-    private final RequestContextController requestContextController;
     private final static Path imageDir = Paths.get("imageDir");
 
     @Inject
-    public InitializeData(OwnerService ownerService, ImageService imageService, RequestContextController rcc,
+    public InitializeData(OwnerService ownerService, ImageService imageService,
                           BreedService breedService, CatService catService
     ) {
         this.ownerService = ownerService;
         this.imageService = imageService;
         this.breedService = breedService;
         this.catService = catService;
-        this.requestContextController = rcc;
     }
 
     public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
@@ -75,7 +73,6 @@ public class InitializeData implements ServletContextListener {
      */
     @SneakyThrows
     private void init() {
-        requestContextController.activate();// start request scope in order to inject request scoped repositories
         initImageDir(imageDir);
 
         Owner albert = Owner.builder()
@@ -187,6 +184,11 @@ public class InitializeData implements ServletContextListener {
         catService.create(snowball);
         catService.create(cleo);
 
+        DisplayData();
+
+    }
+
+    private void DisplayData() {
         System.out.println("==================CATS====================");
         catService.findAll().forEach(cat -> {
             System.out.println();
@@ -233,8 +235,6 @@ public class InitializeData implements ServletContextListener {
             }
         });
         System.out.println();
-
-        requestContextController.deactivate();
     }
 
     private byte[] getImageBytes(UUID id) throws IOException {
