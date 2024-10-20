@@ -1,6 +1,8 @@
 package com.demo.rest.datastore;
 
 import com.demo.rest.controller.servlet.exception.NotFoundException;
+import com.demo.rest.models.breed.entity.Breed;
+import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.utils.CloningUtil;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -24,6 +26,8 @@ public class Datastore {
     private final CloningUtil cloningUtil;
     private final Path imageDir;
     private Set<Owner> owners = new HashSet<>();
+    private Set<Breed> breeds = new HashSet<>();
+    private Set<Cat> cats = new HashSet<>();
 
     @Inject
     public Datastore(CloningUtil cloningUtility) throws URISyntaxException {
@@ -117,6 +121,62 @@ public class Datastore {
             throw new RuntimeException("Can't retrieve image with id \"%s\"".formatted(uuid), e);
         }
     }
+
+    public synchronized List<Breed> findAllBreeds() {
+        return breeds.stream()
+                .map(cloningUtil::clone)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized void createBreed(Breed value) throws IllegalArgumentException {
+        if (breeds.stream().anyMatch(breed -> breed.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The breed id \"%s\" is not unique".formatted(value.getId()));
+        }
+        breeds.add(cloningUtil.clone(value));
+    }
+
+    public synchronized void deleteBreed(Breed value) {
+        if (!breeds.removeIf(breed -> breed.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("No breed found with id: " + value.getId());
+        }
+    }
+
+    public synchronized void updateBreed(Breed value) throws IllegalArgumentException {
+        if (breeds.removeIf(breed -> breed.getId().equals(value.getId()))) {
+            breeds.add(cloningUtil.clone(value));
+        } else {
+            throw new IllegalArgumentException("The breed with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
+
+    public synchronized List<Cat> findAllCats() {
+        return cats.stream()
+                .map(cloningUtil::clone)
+                .collect(Collectors.toList());
+    }
+
+    public synchronized void createCat(Cat value) throws IllegalArgumentException {
+        if (cats.stream().anyMatch(cat -> cat.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("The cat id \"%s\" is not unique".formatted(value.getId()));
+        }
+        cats.add(cloningUtil.clone(value));
+    }
+
+    public synchronized void deleteCat(Cat value) {
+        if (!cats.removeIf(cat -> cat.getId().equals(value.getId()))) {
+            throw new IllegalArgumentException("No cat found with id: " + value.getId());
+        }
+    }
+
+    public synchronized void updateCat(Cat value) throws IllegalArgumentException {
+        if (cats.removeIf(cat -> cat.getId().equals(value.getId()))) {
+            cats.add(cloningUtil.clone(value));
+        } else {
+            throw new IllegalArgumentException("The cat with id \"%s\" does not exist".formatted(value.getId()));
+        }
+    }
+
 
 
 }

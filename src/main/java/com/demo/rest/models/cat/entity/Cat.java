@@ -4,6 +4,8 @@ import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.owner.entity.Owner;
 import lombok.*;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class Cat {
+public class Cat implements Serializable {
 
     private UUID id;
 
@@ -23,4 +25,5 @@ public class Cat {
 
     private Breed breed;
     private Owner owner;
+
 }
