@@ -9,13 +9,17 @@ import com.demo.rest.models.owner.dto.PutOwnerRequest;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.service.OwnerService;
 import com.demo.rest.utils.DtoFunctionFactory;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.UUID;
 
+@RequestScoped
 public class OwnerControllerImplementation implements OwnerController {
     private final OwnerService service;
     private final DtoFunctionFactory factory;
 
+    @Inject
     public OwnerControllerImplementation(OwnerService ownerService, DtoFunctionFactory factory) {
         this.service = ownerService;
         this.factory = factory;

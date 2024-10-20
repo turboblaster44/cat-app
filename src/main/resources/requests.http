@@ -15,8 +15,7 @@ Content-Type: application/json
   "name": "matidon",
   "login": "turbomati",
   "birthDate": "1990-01-01",
-  "salary": "105000.0",
-  "password": "Shhhh!!!Quiet"
+  "salary": "105000.0"
 }
 
 
@@ -29,6 +28,7 @@ GET http://localhost:9080/cat-app/api/images/d80ecfee-a46f-4d05-b02c-8e9664b5982
 
 ### delete iamge
 DELETE http://localhost:9080/cat-app/api/images/d80ecfee-a46f-4d05-b02c-8e9664b5982f
+
 ###
 
 ### put image
@@ -39,6 +39,7 @@ Content-Type: multipart/form-data; boundary=boundary
 Content-Disposition: form-data; name="image"; filename="1.png"
 Content-Type: image/png
 
-< ./45a3c22d-77d0-4571-9f4b-4de78b3e5796.png
+< ./imageDir/45a3c22d-77d0-4571-9f4b-4de78b3e5796.png
 --boundary--
+
 ###

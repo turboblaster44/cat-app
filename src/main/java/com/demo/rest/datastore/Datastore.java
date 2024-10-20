@@ -3,24 +3,34 @@ package com.demo.rest.datastore;
 import com.demo.rest.controller.servlet.exception.NotFoundException;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.utils.CloningUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Log
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class Datastore {
 
     private final CloningUtil cloningUtil;
     private final Path imageDir;
     private Set<Owner> owners = new HashSet<>();
 
-    public Datastore(CloningUtil cloningUtility, Path imageDir) {
+    @Inject
+    public Datastore(CloningUtil cloningUtility) throws URISyntaxException {
         this.cloningUtil = cloningUtility;
-        this.imageDir = imageDir;
+        System.out.println("imagedir");
+        System.out.println(Paths.get(getClass().getClassLoader().getResource("imageDir").toURI()));
+        this.imageDir = Paths.get(getClass().getClassLoader().getResource("imageDir").toURI());
     }
 
     public synchronized List<Owner> findAllOwners() {

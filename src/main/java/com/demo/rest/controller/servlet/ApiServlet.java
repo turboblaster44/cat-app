@@ -3,6 +3,7 @@ package com.demo.rest.controller.servlet;
 import com.demo.rest.models.image.controller.api.ImageController;
 import com.demo.rest.models.owner.controller.api.OwnerController;
 import com.demo.rest.models.owner.dto.PutOwnerRequest;
+import jakarta.inject.Inject;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.ServletException;
@@ -27,8 +28,9 @@ import java.util.regex.Pattern;
 @MultipartConfig(maxFileSize = 200 * 1024)
 public class ApiServlet extends HttpServlet {
 
-    private OwnerController ownerController;
-    private ImageController imageController;
+    private final OwnerController ownerController;
+    private final ImageController imageController;
+
 
     public class Paths {
         public static final String API = "/api";
@@ -39,8 +41,6 @@ public class ApiServlet extends HttpServlet {
         private static final Pattern UUID = Pattern.compile("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}");
 
         public static final Pattern OWNERS = Pattern.compile("/owners/?");
-
-        //public static final Pattern OWNER = Pattern.compile("/owners/(%s)".formatted(UUID.pattern()));
         public static final Pattern OWNER = Pattern.compile("/owners/(%s)".formatted(UUID.pattern()));
 
         public static final Pattern IMAGE = Pattern.compile("/images/(%s)".formatted(UUID.pattern()));
@@ -49,11 +49,10 @@ public class ApiServlet extends HttpServlet {
 
     private final Jsonb jsonb = JsonbBuilder.create();
 
-    @Override
-    public void init() throws ServletException {
-        super.init();
-        ownerController = (OwnerController) getServletContext().getAttribute("ownerController");
-        imageController = (ImageController) getServletContext().getAttribute("imageController");
+    @Inject
+    public ApiServlet(OwnerController ownerController, ImageController imageController) {
+        this.ownerController = ownerController;
+        this.imageController = imageController;
     }
 
     @SuppressWarnings("RedundantThrows")

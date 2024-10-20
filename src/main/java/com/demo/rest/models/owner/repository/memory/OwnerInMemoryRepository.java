@@ -3,15 +3,20 @@ package com.demo.rest.models.owner.repository.memory;
 import com.demo.rest.datastore.Datastore;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.repository.api.OwnerRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@ApplicationScoped
 public class OwnerInMemoryRepository implements OwnerRepository {
 
     private final Datastore store;
 
+    @Inject
     public OwnerInMemoryRepository(Datastore store) {
         this.store = store;
     }

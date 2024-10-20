@@ -1,13 +1,18 @@
-package com.demo.rest.models.image.controller.repository;
+package com.demo.rest.models.image.repository.implementation;
 
 import com.demo.rest.datastore.Datastore;
+import com.demo.rest.models.image.repository.api.ImageRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import java.util.UUID;
 
-public class ImageRepository {
+@ApplicationScoped
+public class ImageRepositoryImplementation implements ImageRepository {
     private final Datastore store;
 
-    public ImageRepository(Datastore store) {
+    @Inject
+    public ImageRepositoryImplementation(Datastore store) {
         this.store = store;
     }
 

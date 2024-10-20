@@ -1,14 +1,19 @@
-package com.demo.rest.models.image.controller.service;
+package com.demo.rest.models.image.service;
 
-import com.demo.rest.models.image.controller.repository.ImageRepository;
+import com.demo.rest.models.image.repository.api.ImageRepository;
+import com.demo.rest.models.image.repository.implementation.ImageRepositoryImplementation;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
+@ApplicationScoped
+@NoArgsConstructor(force = true)
 public class ImageService {
     private final ImageRepository imageRepository;
 
+    @Inject
     public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }

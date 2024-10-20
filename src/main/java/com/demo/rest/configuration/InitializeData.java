@@ -1,14 +1,16 @@
 package com.demo.rest.configuration;
 
-import com.demo.rest.models.image.controller.service.ImageService;
+import com.demo.rest.models.image.service.ImageService;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.service.OwnerService;
-import jakarta.servlet.ServletContextEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Initialized;
+import jakarta.enterprise.context.control.RequestContextController;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
 import lombok.SneakyThrows;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,17 +18,21 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@WebListener
+@ApplicationScoped
 public class InitializeData implements ServletContextListener {
-    private OwnerService ownerService;
-    private ImageService imageService;
+    private final OwnerService ownerService;
+    private final ImageService imageService;
+    private final RequestContextController requestContextController;
+    private final static Path imageDir = Paths.get("imageDir");
 
-    @Override
-    public void contextInitialized(ServletContextEvent event) {
-        Path imageDir = Paths.get(event.getServletContext().getInitParameter("imageDir"));
-        ownerService = (OwnerService) event.getServletContext().getAttribute("ownerService");
-        imageService = (ImageService) event.getServletContext().getAttribute("imageService");
-        initImageDir(imageDir);
+    @Inject
+    public InitializeData(OwnerService ownerService, ImageService imageService, RequestContextController rcc) {
+        this.ownerService = ownerService;
+        this.imageService = imageService;
+        this.requestContextController = rcc;
+    }
+
+    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
         init();
     }
 
@@ -56,6 +62,9 @@ public class InitializeData implements ServletContextListener {
      */
     @SneakyThrows
     private void init() {
+        requestContextController.activate();// start request scope in order to inject request scoped repositories
+        initImageDir(imageDir);
+
         Owner oskar = Owner.builder()
                 .id(UUID.fromString("45a3c22d-77d0-4571-9f4b-4de78b3e5796"))
                 .name("oskar")
@@ -85,20 +94,21 @@ public class InitializeData implements ServletContextListener {
                 .birthDate(LocalDate.now())
                 .build();
 
-        imageService.createImage(oskar.getId(), getImageBytes(oskar.getId()));
-        imageService.createImage(janek.getId(), getImageBytes(janek.getId()));
-        imageService.createImage(gogi.getId(), getImageBytes(gogi.getId()));
-        imageService.createImage(pszemo.getId(), getImageBytes(pszemo.getId()));
-
+//        imageService.createImage(oskar.getId(), getImageBytes(oskar.getId()));
+//        imageService.createImage(janek.getId(), getImageBytes(janek.getId()));
+//        imageService.createImage(gogi.getId(), getImageBytes(gogi.getId()));
+//        imageService.createImage(pszemo.getId(), getImageBytes(pszemo.getId()));
 
         ownerService.create(oskar);
         ownerService.create(janek);
         ownerService.create(gogi);
         ownerService.create(pszemo);
+
+        requestContextController.deactivate();
     }
 
     private byte[] getImageBytes(UUID id) throws IOException {
-        Path resPath = Paths.get("C:\\Users\\micha\\OneDrive\\Pulpit\\GIT REPOS\\cat-app\\src\\main\\res\\" + id.toString() + ".png").normalize();
+        Path resPath = Paths.get("C:\\Users\\micha\\OneDrive\\Pulpit\\GIT REPOS\\cat-app\\src\\main\\resources\\imageDir\\" + id.toString() + ".png");
         return Files.readAllBytes(resPath);
     }
 }

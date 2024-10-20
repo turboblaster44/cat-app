@@ -2,14 +2,17 @@ package com.demo.rest.models.image.controller.implementation;
 
 import com.demo.rest.controller.servlet.exception.NotFoundException;
 import com.demo.rest.models.image.controller.api.ImageController;
-import com.demo.rest.models.image.controller.service.ImageService;
-import com.demo.rest.models.owner.entity.Owner;
+import com.demo.rest.models.image.service.ImageService;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.UUID;
 
+@RequestScoped
 public class ImageControllerImplementation implements ImageController {
     private final ImageService imageService;
 
+    @Inject
     public ImageControllerImplementation(ImageService imageService) {
         this.imageService = imageService;
     }

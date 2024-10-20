@@ -1,11 +1,13 @@
 package com.demo.rest.utils;
 
+import jakarta.enterprise.context.Dependent;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.io.*;
 
 @Log
+@Dependent
 public class CloningUtil {
     @SneakyThrows
     @SuppressWarnings("unchecked")
