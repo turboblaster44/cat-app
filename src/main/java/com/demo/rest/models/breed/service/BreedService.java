@@ -20,6 +20,7 @@ public class BreedService {
     public BreedService(BreedRepository breedRepository) {
         this.breedRepository = breedRepository;
     }
+
     public Optional<Breed> find(UUID id) {
         return breedRepository.find(id);
     }
@@ -36,6 +37,9 @@ public class BreedService {
         breedRepository.delete(breed);
     }
 
+    public void deleteById(UUID id) {
+        breedRepository.deleteById(id);
+    }
     public void update(Breed breed) {
         breedRepository.update(breed);
     }

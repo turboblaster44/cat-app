@@ -12,8 +12,8 @@ PUT http://localhost:9080/cat-app/api/owners/c66de235-cb3d-4880-8c18-43e86d0fac7
 Content-Type: application/json
 
 {
-  "name": "matidon",
-  "login": "turbomati",
+  "name": "Darek",
+  "login": "darek",
   "birthDate": "1990-01-01",
   "salary": "105000.0"
 }

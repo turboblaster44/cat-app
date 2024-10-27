@@ -41,7 +41,12 @@ public class OwnerInMemoryRepository implements OwnerRepository {
 
     @Override
     public void delete(Owner entity) {
-        store.deleteOwner(entity);
+        store.deleteOwner(entity.getId());
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        store.deleteOwner(id);
     }
 
     @Override

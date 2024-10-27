@@ -27,6 +27,7 @@ public class BreedRepositoryImplementation implements BreedRepository {
                 .filter(breed -> breed.getId().equals(id))
                 .findFirst();
     }
+
     @Override
     public List<Breed> findAll() {
         return store.findAllBreeds();
@@ -38,8 +39,13 @@ public class BreedRepositoryImplementation implements BreedRepository {
     }
 
     @Override
-    public void delete(Breed entity) {
-        store.deleteBreed(entity);
+    public void delete(Breed breed) {
+        store.deleteBreed(breed.getId());
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        store.deleteBreed(id);
     }
 
     @Override

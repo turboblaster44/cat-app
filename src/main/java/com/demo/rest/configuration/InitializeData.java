@@ -184,7 +184,7 @@ public class InitializeData implements ServletContextListener {
         catService.create(snowball);
         catService.create(cleo);
 
-        DisplayData();
+//        DisplayData();
 
     }
 

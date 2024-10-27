@@ -56,7 +56,12 @@ public class CatRepositoryImplementation implements CatRepository {
 
     @Override
     public void delete(Cat entity) {
-        store.deleteCat(entity);
+        store.deleteCat(entity.getId());
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        store.deleteCat(id);
     }
 
     @Override

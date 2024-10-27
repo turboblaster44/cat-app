@@ -1,30 +1,21 @@
-package com.demo.rest.models.cat.entity;
+package com.demo.rest.models.cat.model;
 
 import com.demo.rest.models.breed.entity.Breed;
+import com.demo.rest.models.cat.entity.CatColor;
 import com.demo.rest.models.owner.entity.Owner;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@SuperBuilder
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString(callSuper = true)
+@ToString
 @EqualsAndHashCode
-public class Cat implements Serializable {
-
-    private UUID id;
-
+public class CatModel {
     private String name;
     private CatColor color;
     private Float weight;
-
-    private Breed breed;
-    private Owner owner;
-
 }

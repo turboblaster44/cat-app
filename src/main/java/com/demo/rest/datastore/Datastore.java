@@ -57,9 +57,9 @@ public class Datastore {
         owners.add(cloningUtil.clone(value));
     }
 
-    public synchronized void deleteOwner(Owner value) {
-        if (!owners.removeIf(owner -> owner.getId().equals(value.getId()))) {
-            throw new IllegalArgumentException("No owner found with id: " + value.getId());
+    public synchronized void deleteOwner(UUID id) {
+        if (!owners.removeIf(owner -> owner.getId().equals(id))) {
+            throw new IllegalArgumentException("No owner found with id: " + id);
         }
     }
 
@@ -135,9 +135,9 @@ public class Datastore {
         breeds.add(cloningUtil.clone(value));
     }
 
-    public synchronized void deleteBreed(Breed value) {
-        if (!breeds.removeIf(breed -> breed.getId().equals(value.getId()))) {
-            throw new IllegalArgumentException("No breed found with id: " + value.getId());
+    public synchronized void deleteBreed(UUID id) {
+        if (!breeds.removeIf(breed -> breed.getId().equals(id))) {
+            throw new IllegalArgumentException("No breed found with id: " + id);
         }
     }
 
@@ -163,9 +163,9 @@ public class Datastore {
         cats.add(cloningUtil.clone(value));
     }
 
-    public synchronized void deleteCat(Cat value) {
-        if (!cats.removeIf(cat -> cat.getId().equals(value.getId()))) {
-            throw new IllegalArgumentException("No cat found with id: " + value.getId());
+    public synchronized void deleteCat(UUID id) {
+        if (!cats.removeIf(cat -> cat.getId().equals(id))) {
+            throw new IllegalArgumentException("No cat found with id: " + id);
         }
     }
 
