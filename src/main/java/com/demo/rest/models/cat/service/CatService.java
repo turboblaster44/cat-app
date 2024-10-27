@@ -46,6 +46,8 @@ public class CatService {
         catRepository.delete(cat);
     }
 
+    public void deleteById(UUID id) {catRepository.deleteById(id);}
+
     public void update(Cat cat) {
         catRepository.update(cat);
     }

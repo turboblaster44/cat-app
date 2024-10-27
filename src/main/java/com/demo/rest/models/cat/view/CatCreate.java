@@ -88,7 +88,7 @@ public class CatCreate implements Serializable {
     }
 
     public String saveAction() {
-        catService.create(factory.modelToCatFunction().apply(cat));
+        catService.create(factory.modelToCat().apply(cat));
         conversation.end();
         return "/breed/breed_list.xhtml?faces-redirect=true";
     }

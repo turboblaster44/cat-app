@@ -45,6 +45,12 @@ public class CatRepositoryImplementation implements CatRepository {
     }
 
     @Override
+    public void deleteByBreedId(UUID id) {
+        store.deleteCatsByBreedId(id);
+
+    }
+
+    @Override
     public List<Cat> findAll() {
         return store.findAllCats();
     }

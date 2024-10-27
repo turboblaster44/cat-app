@@ -156,6 +156,13 @@ public class Datastore {
                 .collect(Collectors.toList());
     }
 
+    public synchronized List<Cat> findCatsByBreedId(UUID id) {
+        return cats.stream()
+                .filter(cat -> cat.getBreed().getId().equals(id))
+                .map(cloningUtil::clone)
+                .collect(Collectors.toList());
+    }
+
     public synchronized void createCat(Cat value) throws IllegalArgumentException {
         if (cats.stream().anyMatch(cat -> cat.getId().equals(value.getId()))) {
             throw new IllegalArgumentException("The cat id \"%s\" is not unique".formatted(value.getId()));
@@ -169,6 +176,14 @@ public class Datastore {
         }
     }
 
+    public synchronized void deleteCatsByBreedId(UUID id) {
+        boolean removedAny = cats.removeIf(cat -> cat.getBreed().getId().equals(id));
+        // If no cats were removed, throw an exception
+        if (!removedAny) {
+            throw new IllegalArgumentException("No cats found with breed id: " + id);
+        }
+    }
+
     public synchronized void updateCat(Cat value) throws IllegalArgumentException {
         if (cats.removeIf(cat -> cat.getId().equals(value.getId()))) {
             cats.add(cloningUtil.clone(value));
@@ -176,7 +191,6 @@ public class Datastore {
             throw new IllegalArgumentException("The cat with id \"%s\" does not exist".formatted(value.getId()));
         }
     }
-
 
 
 }

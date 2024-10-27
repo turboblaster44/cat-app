@@ -55,20 +55,20 @@
                         </h:link>
                     </h:column>
 
-                    <!--<h:column>
+                    <h:column>
                         <f:facet name="header">Edit</f:facet>
-                        <h:link outcome="/weapontype/weapontype_edit.xhtml" value="Edit">
-                            <f:param name="id" value="#{weaponType.id}"/>
+                        <h:link outcome="/cat/cat_edit.xhtml" value="Edit">
+                            <f:param name="id" value="#{cat.id}"/>
                         </h:link>
-                    </h:column>-->
+                    </h:column>
 
-<!--                    <h:column>-->
-<!--                        <f:facet name="header">Delete</f:facet>-->
-<!--                        <h:form>-->
-<!--                            <h:commandButton styleClass="btn" value="Delete"-->
-<!--                                             action="#{weaponTypeView.deleteWeapon(weapon)}"/>-->
-<!--                        </h:form>-->
-<!--                    </h:column>-->
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:form>
+                            <h:commandButton styleClass="btn" value="Delete"
+                                             action="#{breedView.deleteCat(cat)}"/>
+                        </h:form>
+                    </h:column>
 
 <!--                    <f:facet name="footer">-->
 <!--                        <h:button styleClass="btn" outcome="/weapontype/weapontype_create__basic.xhtml"-->

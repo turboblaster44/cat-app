@@ -2,6 +2,7 @@ package com.demo.rest.models.breed.service;
 
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.breed.repository.api.BreedRepository;
+import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -15,10 +16,12 @@ import java.util.UUID;
 @NoArgsConstructor(force = true)
 public class BreedService {
     private final BreedRepository breedRepository;
+    private final CatRepository catRepository;
 
     @Inject
-    public BreedService(BreedRepository breedRepository) {
+    public BreedService(BreedRepository breedRepository, CatRepository catRepository) {
         this.breedRepository = breedRepository;
+        this.catRepository = catRepository;
     }
 
     public Optional<Breed> find(UUID id) {
@@ -35,6 +38,7 @@ public class BreedService {
 
     public void delete(Breed breed) {
         breedRepository.delete(breed);
+        catRepository.deleteByBreedId(breed.getId());
     }
 
     public void deleteById(UUID id) {

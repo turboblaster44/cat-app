@@ -12,7 +12,8 @@ import java.util.UUID;
 public interface CatRepository extends Repository<Cat, UUID> {
 
     List<Cat> findByBreed(Breed breed);
-
     List<Cat> findByOwner(Owner owner);
+
+    void deleteByBreedId(UUID id);
 
 }

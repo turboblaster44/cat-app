@@ -6,7 +6,7 @@ import com.demo.rest.models.cat.model.CatEditModel;
 import java.io.Serializable;
 import java.util.function.Function;
 
-public class CatToCatEditModelFunction implements Function<Cat, CatEditModel>, Serializable {
+public class CatToEditModelFunction implements Function<Cat, CatEditModel>, Serializable {
 
     @Override
     public CatEditModel apply(Cat entity) {

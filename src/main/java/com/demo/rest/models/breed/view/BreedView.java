@@ -54,18 +54,14 @@ public class BreedView implements Serializable {
         if (breed.isPresent()) {
             this.breed = factory.breedToModel().apply(breed.get());
             this.cats = factory.catsToModel().apply(catService.findByBreed(breed.get()));
-            System.out.println("************************");
-            System.out.println(this.breed);
-            System.out.println(this.cats);
-            System.out.println("************************");
         } else {
             FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "weaponType not found");
         }
     }
 
-//    public String deleteWeapon(WeaponsModel.Weapon weapon) {
-//        weaponService.delete(weapon.getId());
-//        return "weapontype_view?faces-redirect=true&id=" + this.id;
-//    }
+    public String deleteCat(CatsModel.Cat cat) {
+        catService.deleteById(cat.getId());
+        return "breed_view?faces-redirect=true&id=" + this.id;
+    }
 
 }
