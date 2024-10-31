@@ -1,12 +1,12 @@
 package com.demo.rest.datastore;
 
-import com.demo.rest.controller.servlet.exception.NotFoundException;
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.utils.CloningUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 

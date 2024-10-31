@@ -1,10 +1,10 @@
 package com.demo.rest.models.image.controller.implementation;
 
-import com.demo.rest.controller.servlet.exception.NotFoundException;
 import com.demo.rest.models.image.controller.api.ImageController;
 import com.demo.rest.models.image.service.ImageService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.UUID;
 

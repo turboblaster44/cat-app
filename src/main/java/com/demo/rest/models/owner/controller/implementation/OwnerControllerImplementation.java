@@ -1,7 +1,5 @@
 package com.demo.rest.models.owner.controller.implementation;
 
-import com.demo.rest.controller.servlet.exception.HttpRequestException;
-import com.demo.rest.controller.servlet.exception.NotFoundException;
 import com.demo.rest.models.owner.controller.api.OwnerController;
 import com.demo.rest.models.owner.dto.GetOwnerResponse;
 import com.demo.rest.models.owner.dto.GetOwnersResponse;
@@ -11,6 +9,7 @@ import com.demo.rest.models.owner.service.OwnerService;
 import com.demo.rest.utils.DtoFunctionFactory;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 
 import java.util.UUID;
 

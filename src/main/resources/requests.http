@@ -42,4 +42,21 @@ Content-Type: image/png
 < ./imageDir/45a3c22d-77d0-4571-9f4b-4de78b3e5796.png
 --boundary--
 
-###
+### Get Breeds
+GET http://localhost:9080/cat-app/api/breeds
+
+### Get Breeds
+GET http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c677
+
+###DELETE BREED
+DELETE http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c677
+
+###PUT BREED
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c677
+Content-Type: application/json
+
+{
+  "name": "Oriental Shorthair",
+  "averageLifespan": 13,
+  "hypoallergenic": true
+}
