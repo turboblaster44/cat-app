@@ -2,6 +2,7 @@ package com.demo.rest.models.breed.service;
 
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.breed.repository.api.BreedRepository;
+import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -36,6 +37,15 @@ public class BreedService {
         breedRepository.create(breed);
     }
 
+    public void put(Breed breed) {
+        if (breedRepository.find(breed.getId()).isEmpty())
+            breedRepository.create(breed);
+        else
+            breedRepository.update(breed);
+    }
+
+
+
     public void delete(Breed breed) {
         breedRepository.delete(breed);
         catRepository.deleteByBreedId(breed.getId());
@@ -43,7 +53,9 @@ public class BreedService {
 
     public void deleteById(UUID id) {
         breedRepository.deleteById(id);
+        catRepository.deleteByBreedId(id);
     }
+
     public void update(Breed breed) {
         breedRepository.update(breed);
     }

@@ -167,7 +167,8 @@ public class Datastore {
         if (cats.stream().anyMatch(cat -> cat.getId().equals(value.getId()))) {
             throw new IllegalArgumentException("The cat id \"%s\" is not unique".formatted(value.getId()));
         }
-        cats.add(cloningUtil.clone(value));
+        Cat entity = cloneWithRelationships(value);
+        cats.add(entity);
     }
 
     public synchronized void deleteCat(UUID id) {
@@ -185,12 +186,32 @@ public class Datastore {
     }
 
     public synchronized void updateCat(Cat value) throws IllegalArgumentException {
+        Cat entity = cloneWithRelationships(value);
         if (cats.removeIf(cat -> cat.getId().equals(value.getId()))) {
-            cats.add(cloningUtil.clone(value));
+            cats.add(entity);
         } else {
             throw new IllegalArgumentException("The cat with id \"%s\" does not exist".formatted(value.getId()));
         }
     }
 
+    private Cat cloneWithRelationships(Cat value) {
+        Cat entity = cloningUtil.clone(value);
+
+        if (entity.getOwner() != null) {
+            entity.setOwner(owners.stream()
+                    .filter(owner -> owner.getId().equals(value.getOwner().getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No owner with id \"%s\".".formatted(value.getOwner().getId()))));
+        }
+
+        if (entity.getBreed() != null) {
+            entity.setBreed(breeds.stream()
+                    .filter(breed -> breed.getId().equals(value.getBreed().getId()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No breed with id \"%s\".".formatted(value.getBreed().getId()))));
+        }
+
+        return entity;
+    }
 
 }

@@ -1,4 +1,4 @@
-package com.demo.rest.models.breed.dto.funcion;
+package com.demo.rest.models.breed.dto.function;
 
 import com.demo.rest.models.breed.dto.GetBreedResponse;
 import com.demo.rest.models.breed.entity.Breed;

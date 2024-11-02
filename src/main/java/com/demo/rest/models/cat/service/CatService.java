@@ -42,11 +42,20 @@ public class CatService {
         catRepository.create(cat);
     }
 
+    public void put(Cat cat) {
+        if (catRepository.find(cat.getId()).isEmpty())
+            catRepository.create(cat);
+        else
+            catRepository.update(cat);
+    }
+
     public void delete(Cat cat) {
         catRepository.delete(cat);
     }
 
-    public void deleteById(UUID id) {catRepository.deleteById(id);}
+    public void deleteById(UUID id) {
+        catRepository.deleteById(id);
+    }
 
     public void update(Cat cat) {
         catRepository.update(cat);

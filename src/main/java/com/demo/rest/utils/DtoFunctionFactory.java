@@ -1,13 +1,15 @@
 package com.demo.rest.utils;
 
-import com.demo.rest.models.breed.dto.funcion.BreedToResponseFunction;
-import com.demo.rest.models.breed.dto.funcion.BreedsToResponseFunction;
-import com.demo.rest.models.breed.dto.funcion.RequestToBreedFunction;
+import com.demo.rest.models.breed.dto.function.BreedToResponseFunction;
+import com.demo.rest.models.breed.dto.function.BreedsToResponseFunction;
+import com.demo.rest.models.breed.dto.function.RequestToBreedFunction;
+import com.demo.rest.models.cat.dto.function.CatToResponseFunction;
+import com.demo.rest.models.cat.dto.function.CatsToResponseFunction;
+import com.demo.rest.models.cat.dto.function.RequestToCatFunction;
 import com.demo.rest.models.owner.dto.functions.OwnerToResponseFunction;
 import com.demo.rest.models.owner.dto.functions.OwnersToResponseFunction;
 import com.demo.rest.models.owner.dto.functions.RequestToOwnerFunction;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.core.Request;
 
 @ApplicationScoped
 public class DtoFunctionFactory {
@@ -33,6 +35,18 @@ public class DtoFunctionFactory {
 
     public RequestToBreedFunction requestToBreed() {
         return new RequestToBreedFunction();
+    }
+
+    public CatsToResponseFunction catsToResponse() {
+        return new CatsToResponseFunction();
+    }
+
+    public CatToResponseFunction catToResponse() {
+        return new CatToResponseFunction();
+    }
+
+    public RequestToCatFunction requestToCat() {
+        return new RequestToCatFunction();
     }
 
 
