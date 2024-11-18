@@ -56,6 +56,11 @@ public class CatRestController implements CatController {
     }
 
     @Override
+    public GetCatsResponse getCatsByBreed(UUID id) {
+        return factory.catsToResponse().apply(service.findByBreedId(id));
+    }
+
+    @Override
     public void putCat(UUID breedId, UUID catId, PutCatRequest request) {
         try {
             service.put(factory.requestToCat().apply(breedId, catId, request));

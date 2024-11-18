@@ -4,6 +4,7 @@ import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.breed.service.BreedService;
 import com.demo.rest.models.cat.dto.PutCatRequest;
 import com.demo.rest.models.cat.entity.Cat;
+import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.utils.TriFunction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -21,6 +22,9 @@ public class RequestToCatFunction implements TriFunction<UUID, UUID, PutCatReque
                 .color(request.getColor())
                 .breed(Breed.builder()
                         .id(breedId)
+                        .build())
+                .owner(Owner.builder()
+                        .id(request.getOwnerId())
                         .build())
                 .build();
     }

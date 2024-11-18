@@ -5,7 +5,6 @@ import com.demo.rest.models.breed.service.BreedService;
 import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.entity.CatColor;
 import com.demo.rest.models.cat.service.CatService;
-import com.demo.rest.models.image.service.ImageService;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.service.OwnerService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,15 +29,15 @@ public class InitializeData implements ServletContextListener {
     private final OwnerService ownerService;
     private final BreedService breedService;
     private final CatService catService;
-    private final ImageService imageService;
+    //    private final ImageService imageService;
     private final static Path imageDir = Paths.get("imageDir");
 
     @Inject
-    public InitializeData(OwnerService ownerService, ImageService imageService,
+    public InitializeData(OwnerService ownerService,
                           BreedService breedService, CatService catService
     ) {
         this.ownerService = ownerService;
-        this.imageService = imageService;
+//        this.imageService = imageService;
         this.breedService = breedService;
         this.catService = catService;
     }
@@ -105,11 +104,6 @@ public class InitializeData implements ServletContextListener {
                 .build();
 
 
-        ownerService.create(albert);
-        ownerService.create(bartek);
-        ownerService.create(zenek);
-        ownerService.create(karol);
-
         Breed maineCoon = Breed.builder()
                 .id(UUID.fromString("86b6b195-901d-4796-870d-b2719362c677"))
                 .name("Maine Coon")
@@ -138,10 +132,6 @@ public class InitializeData implements ServletContextListener {
                 .isHypoallergenic(true)
                 .build();
 
-        breedService.create(maineCoon);
-        breedService.create(siamese);
-        breedService.create(ragdoll);
-        breedService.create(sphynx);
 
         Cat whiskers = Cat.builder()
                 .id(UUID.fromString("e07882dd-3cba-4a59-af8e-3098538f0319"))
@@ -179,10 +169,25 @@ public class InitializeData implements ServletContextListener {
                 .owner(karol)
                 .build();
 
-        catService.create(whiskers);
-        catService.create(shadow);
-        catService.create(snowball);
-        catService.create(cleo);
+        try {
+            ownerService.create(albert);
+            ownerService.create(bartek);
+            ownerService.create(zenek);
+            ownerService.create(karol);
+
+            breedService.create(maineCoon);
+            breedService.create(siamese);
+            breedService.create(ragdoll);
+            breedService.create(sphynx);
+
+
+            catService.create(whiskers);
+            catService.create(shadow);
+            catService.create(snowball);
+            catService.create(cleo);
+        } catch (Exception e) {
+            System.out.println("elemnty juz w bazie ");
+        }
 
 //        DisplayData();
 
@@ -208,7 +213,7 @@ public class InitializeData implements ServletContextListener {
             System.out.println("Average Lifespan: " + breed.getAverageLifespan() + " years");
             System.out.println("Hypoallergenic: " + (breed.isHypoallergenic() ? "Yes" : "No"));
             // If you want to display the cats of this breed (if you have this relationship set up)
-            List<Cat> catsOfBreed = catService.findByBreed(breed);
+            List<Cat> catsOfBreed = catService.findByBreedId(breed.getId());
             if (catsOfBreed != null && !catsOfBreed.isEmpty()) {
                 System.out.println("Cats of this breed:");
                 catsOfBreed.forEach(cat -> System.out.println("    - " + cat.getName()));

@@ -7,6 +7,7 @@ import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -33,29 +34,29 @@ public class BreedService {
         return breedRepository.findAll();
     }
 
+    @Transactional
     public void create(Breed breed) {
         breedRepository.create(breed);
     }
 
+    @Transactional
     public void put(Breed breed) {
         if (breedRepository.find(breed.getId()).isEmpty())
             breedRepository.create(breed);
         else
             breedRepository.update(breed);
     }
-
-
-
+    @Transactional
     public void delete(Breed breed) {
-        breedRepository.delete(breed);
-        catRepository.deleteByBreedId(breed.getId());
+        breedRepository.deleteById(breed.getId());
     }
 
+    @Transactional
     public void deleteById(UUID id) {
         breedRepository.deleteById(id);
-        catRepository.deleteByBreedId(id);
     }
 
+    @Transactional
     public void update(Breed breed) {
         breedRepository.update(breed);
     }

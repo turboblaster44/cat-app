@@ -2,6 +2,7 @@ package com.demo.rest.models.cat.entity;
 
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.owner.entity.Owner;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -16,15 +17,23 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 @EqualsAndHashCode
+@Entity
+@Table(name = "cats")
 public class Cat implements Serializable {
 
+    @Id
     private UUID id;
 
     private String name;
     private CatColor color;
     private Float weight;
 
+    @ManyToOne
+    @JoinColumn(name = "breed")
     private Breed breed;
+
+    @ManyToOne
+    @JoinColumn(name = "owner")
     private Owner owner;
 
 }

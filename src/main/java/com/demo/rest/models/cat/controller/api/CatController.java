@@ -32,6 +32,12 @@ public interface CatController {
     @Produces(MediaType.APPLICATION_JSON)
     GetCatResponse getCat(@PathParam("id") UUID id);
 
+    @GET
+    @Path("/breeds/{id}/cats")
+    @Produces(MediaType.APPLICATION_JSON)
+    GetCatsResponse getCatsByBreed(@PathParam("id") UUID id);
+
+
 
     @PUT
     @Path("/breeds/{breedId}/cats/{catId}")

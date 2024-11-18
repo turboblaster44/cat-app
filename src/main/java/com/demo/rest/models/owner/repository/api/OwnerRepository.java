@@ -7,5 +7,4 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface OwnerRepository extends Repository<Owner, UUID> {
-    Optional<Owner> findByLogin(String login);
 }

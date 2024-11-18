@@ -53,7 +53,7 @@ public class BreedView implements Serializable {
         Optional<Breed> breed = breedService.find(id);
         if (breed.isPresent()) {
             this.breed = factory.breedToModel().apply(breed.get());
-            this.cats = factory.catsToModel().apply(catService.findByBreed(breed.get()));
+            this.cats = factory.catsToModel().apply(catService.findByBreedId(breed.get().getId()));
         } else {
             FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "weaponType not found");
         }

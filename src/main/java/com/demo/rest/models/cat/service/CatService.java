@@ -6,6 +6,7 @@ import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -26,8 +27,8 @@ public class CatService {
         return catRepository.find(id);
     }
 
-    public List<Cat> findByBreed(Breed breed) {
-        return catRepository.findByBreed(breed);
+    public List<Cat> findByBreedId(UUID id) {
+        return catRepository.findByBreed(id);
     }
 
     public List<Cat> findByOwner(Owner owner) {
@@ -38,10 +39,12 @@ public class CatService {
         return catRepository.findAll();
     }
 
+    @Transactional
     public void create(Cat cat) {
         catRepository.create(cat);
     }
 
+    @Transactional
     public void put(Cat cat) {
         if (catRepository.find(cat.getId()).isEmpty())
             catRepository.create(cat);
@@ -49,14 +52,17 @@ public class CatService {
             catRepository.update(cat);
     }
 
+    @Transactional
     public void delete(Cat cat) {
         catRepository.delete(cat);
     }
 
+    @Transactional
     public void deleteById(UUID id) {
         catRepository.deleteById(id);
     }
 
+    @Transactional
     public void update(Cat cat) {
         catRepository.update(cat);
     }

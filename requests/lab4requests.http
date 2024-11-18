@@ -1,0 +1,71 @@
+### Get Breeds
+GET http://localhost:9080/cat-app/api/breeds
+
+### Get Breed
+GET http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+
+
+
+###DELETE BREED
+DELETE http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+
+###PUT BREED (create)
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Content-Type: application/json
+
+{
+  "name": "Oriental SSSSSSSSShorthair",
+  "averageLifespan": 13,
+  "hypoallergenic": true
+}
+
+###PUT BREED (update)
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Content-Type: application/json
+
+{
+  "name": "Oriental Shorthair",
+  "averageLifespan": 13,
+  "hypoallergenic": true
+}
+
+
+
+### Get Cats
+GET http://localhost:9080/cat-app/api/cats
+
+### Get Cat
+GET http://localhost:9080/cat-app/api/cats/48021e06-102c-4c9d-bf4d-731f481fb59d
+
+###DELETE CAT
+DELETE http://localhost:9080/cat-app/api/cats/86b6b195-901d-4796-870d-b2719362c678
+
+###PUT CAT (create)
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Content-Type: application/json
+
+{
+  "name": "Destroyer",
+  "weight": 13.5,
+  "color": "BLACK",
+  "ownerId": "2f4d3424-8f9b-4e58-bd0a-764bd776ccde"
+}
+
+### Get cats by breed
+GET http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678/cats
+
+###GET created cat
+GET http://localhost:9080/cat-app/api/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+
+
+###PUT CAT (update)
+PUT http://localhost:9080/cat-app/api/breeds/b245181e-1f31-4ca5-906f-55ca5a88ca11/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Content-Type: application/json
+
+{
+  "name": "Destroyer",
+  "weight": 17,
+  "color": "BLACK",
+  "ownerId": "45a3c22d-77d0-4571-9f4b-4de78b3e5796"
+
+}

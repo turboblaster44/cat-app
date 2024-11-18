@@ -72,7 +72,7 @@ public class BreedRestController implements BreedController {
     @Override
     public void deleteBreed(UUID id) {
         service.find(id).ifPresentOrElse(
-                entity -> service.deleteById(id),
+                entity -> service.delete(entity),
                 () -> {
                     throw new NotFoundException();
                 }
