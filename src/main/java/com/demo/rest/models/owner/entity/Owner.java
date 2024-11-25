@@ -33,4 +33,11 @@ public class Owner implements Serializable {
     private List<Cat> cats;
 
     private String login;
+    @ToString.Exclude
+    private String password;
+
+    @CollectionTable(name = "owner__roles", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "role")
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
 }

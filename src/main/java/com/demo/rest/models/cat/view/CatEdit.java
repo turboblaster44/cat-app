@@ -5,6 +5,7 @@ import com.demo.rest.models.cat.entity.CatColor;
 import com.demo.rest.models.cat.model.CatEditModel;
 import com.demo.rest.models.cat.service.CatService;
 import com.demo.rest.utils.ModelFunctionFactory;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -25,7 +26,7 @@ import java.util.UUID;
 public class CatEdit implements Serializable {
 
 
-    private final CatService service;
+    private CatService service;
 
     private final ModelFunctionFactory factory;
 
@@ -44,9 +45,13 @@ public class CatEdit implements Serializable {
     }
 
     @Inject
-    public CatEdit(CatService service, ModelFunctionFactory factory) {
-        this.service = service;
+    public CatEdit(ModelFunctionFactory factory) {
         this.factory = factory;
+    }
+
+    @EJB
+    public void setService(CatService service) {
+        this.service = service;
     }
 
     /**
@@ -54,7 +59,7 @@ public class CatEdit implements Serializable {
      * field and initialized during init of the view.
      */
     public void init() throws IOException {
-        Optional<Cat> cat = service.find(id);
+        Optional<Cat> cat = service.findForCallerPrincipal(id);
         if (cat.isPresent()) {
             this.cat = factory.catToEditModel().apply(cat.get());
         } else {

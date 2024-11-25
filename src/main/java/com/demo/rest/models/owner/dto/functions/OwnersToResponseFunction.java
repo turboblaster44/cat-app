@@ -17,6 +17,7 @@ public class OwnersToResponseFunction implements Function<List<Owner>, GetOwners
                                 .name(owner.getName())
                                 .birthDate(owner.getBirthDate())
                                 .salary(owner.getSalary())
+                                .roles(owner.getRoles())
                                 .build())
                         .toList())
                 .build();

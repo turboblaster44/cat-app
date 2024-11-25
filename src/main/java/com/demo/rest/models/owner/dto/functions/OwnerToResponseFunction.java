@@ -16,21 +16,8 @@ public class OwnerToResponseFunction implements Function<Owner, GetOwnerResponse
                 .name(owner.getName())
                 .birthDate(owner.getBirthDate())
                 .salary(owner.getSalary())
+                .roles(owner.getRoles())
                 .build();
     }
 
-    public GetOwnerResponse apply(Optional<Owner> optionalOwner) {
-        if (optionalOwner.isPresent()) {
-            Owner owner = optionalOwner.get();
-            return GetOwnerResponse.builder()
-                    .id(owner.getId())
-                    .login(owner.getLogin())
-                    .name(owner.getName())
-                    .birthDate(owner.getBirthDate())
-                    .salary(owner.getSalary())
-                    .build();
-        } else {
-            return null; // Or you can throw new IllegalArgumentException("Owner not found");
-        }
-    }
 }

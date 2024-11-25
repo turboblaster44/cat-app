@@ -5,15 +5,17 @@ import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Dependent
 public class CatPersistenceRepository implements CatRepository {
 
 
@@ -54,6 +56,18 @@ public class CatPersistenceRepository implements CatRepository {
     @Override
     public void update(Cat entity) {
         em.merge(entity);
+    }
+
+    @Override
+    public Optional<Cat> findByIdAndOwner(UUID id, Owner owner) {
+        try {
+            return Optional.of(em.createQuery("select w from Cat w where w.id = :id and w.owner = :owner", Cat.class)
+                    .setParameter("owner", owner)
+                    .setParameter("id", id)
+                    .getSingleResult());
+        } catch (NoResultException ex) {
+            return Optional.empty();
+        }
     }
 
     @Override

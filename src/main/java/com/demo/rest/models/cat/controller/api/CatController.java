@@ -51,4 +51,6 @@ public interface CatController {
     @Path("/cats/{id}")
     void deleteCat(@PathParam("id") UUID id);
 
+
+
 }

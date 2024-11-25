@@ -2,6 +2,7 @@ package com.demo.rest.models.cat.model.function;
 
 import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.model.CatEditModel;
+import com.demo.rest.models.owner.entity.Owner;
 import lombok.SneakyThrows;
 
 import java.io.Serializable;
@@ -18,6 +19,9 @@ public class UpdateCatWithModelFunction implements BiFunction<Cat, CatEditModel,
                 .color(request.getColor())
                 .weight(request.getWeight())
                 .breed(entity.getBreed())
+                .owner(Owner.builder()
+                        .id(request.getOwner().getId())
+                        .build())
                 .build();
     }
 }

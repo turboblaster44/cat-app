@@ -6,101 +6,133 @@ import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.entity.CatColor;
 import com.demo.rest.models.cat.service.CatService;
 import com.demo.rest.models.owner.entity.Owner;
+import com.demo.rest.models.owner.entity.OwnerRoles;
 import com.demo.rest.models.owner.service.OwnerService;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.security.DeclareRoles;
+import jakarta.annotation.security.RunAs;
+import jakarta.ejb.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Initialized;
 import jakarta.enterprise.context.control.RequestContextController;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import jakarta.security.enterprise.SecurityContext;
 import jakarta.servlet.ServletContextListener;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Singleton
+@Startup
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+@NoArgsConstructor
+@DependsOn("InitializeAdminService")
+@DeclareRoles({OwnerRoles.ADMIN, OwnerRoles.OWNER})
+@RunAs(OwnerRoles.ADMIN)
 public class InitializeData implements ServletContextListener {
-    private final OwnerService ownerService;
-    private final BreedService breedService;
-    private final CatService catService;
+    private OwnerService ownerService;
+    private BreedService breedService;
+    private CatService catService;
+
     //    private final ImageService imageService;
-    private final static Path imageDir = Paths.get("imageDir");
+//    private final static Path imageDir = Paths.get("imageDir");
 
     @Inject
-    public InitializeData(OwnerService ownerService,
-                          BreedService breedService, CatService catService
-    ) {
-        this.ownerService = ownerService;
-//        this.imageService = imageService;
-        this.breedService = breedService;
-        this.catService = catService;
+        private SecurityContext securityContext;
+
+    @EJB
+    public void setOwnerService(OwnerService service) {
+        this.ownerService = service;
     }
 
-    public void contextInitialized(@Observes @Initialized(ApplicationScoped.class) Object init) {
-        init();
+    @EJB
+    public void setCatService(CatService service) {
+        this.catService = service;
     }
 
-    private void initImageDir(Path imageDir) {
-        try {
-            Files.createDirectories(imageDir);
-            System.out.println("directory created: " + imageDir.toAbsolutePath());
-            //clear directory
-            Files.walk(imageDir)
-                    .filter(Files::isRegularFile)
-                    .forEach(file -> {
-                        try {
-                            Files.delete(file);
-                        } catch (IOException e) {
-                            System.err.println("Could not delete file: " + file);
-                        }
-                    });
-
-        } catch (IOException e) {
-            throw new IllegalStateException("exception when creating picture directory", e);
-        }
+    @EJB
+    public void setBreedService(BreedService service) {
+        this.breedService = service;
     }
+
+//    private void initImageDir(Path imageDir) {
+//        try {
+//            Files.createDirectories(imageDir);
+//            System.out.println("directory created: " + imageDir.toAbsolutePath());
+//            //clear directory
+//            Files.walk(imageDir)
+//                    .filter(Files::isRegularFile)
+//                    .forEach(file -> {
+//                        try {
+//                            Files.delete(file);
+//                        } catch (IOException e) {
+//                            System.err.println("Could not delete file: " + file);
+//                        }
+//                    });
+//
+//        } catch (IOException e) {
+//            throw new IllegalStateException("exception when creating picture directory", e);
+//        }
+//    }
 
     /**
      * Initializes database with some example values. Should be called after creating this object. This object should be
      * created only once.
      */
+    @PostConstruct
     @SneakyThrows
     private void init() {
-        initImageDir(imageDir);
+//        initImageDir(imageDir);
+//        displayOwners();
+        System.out.println("there is the owner service");
+        System.out.println(ownerService.findAll());
+
 
         Owner albert = Owner.builder()
                 .id(UUID.fromString("45a3c22d-77d0-4571-9f4b-4de78b3e5796"))
                 .name("albert")
                 .login("albert")
+                .password("albert")
                 .salary(10000.0f)
                 .birthDate(LocalDate.now())
+                .roles(List.of(OwnerRoles.OWNER))
                 .build();
         Owner bartek = Owner.builder()
                 .id(UUID.fromString("b98f3729-9a89-4ebb-b434-4d2332f5005f"))
                 .name("bartek")
                 .login("bartek")
+                .password("bartek")
                 .salary(15000.0f)
                 .birthDate(LocalDate.now())
+                .roles(List.of(OwnerRoles.OWNER))
                 .build();
         Owner zenek = Owner.builder()
                 .id(UUID.fromString("d80ecfee-a46f-4d05-b02c-8e9664b5982f"))
                 .name("zenek")
                 .login("zenek")
+                .password("zenek")
                 .salary(100.0f)
                 .birthDate(LocalDate.now())
+                .roles(List.of(OwnerRoles.OWNER))
                 .build();
         Owner karol = Owner.builder()
                 .id(UUID.fromString("2f4d3424-8f9b-4e58-bd0a-764bd776ccde"))
                 .name("karol")
                 .login("karol")
+                .password("karol")
                 .salary(100.0f)
                 .birthDate(LocalDate.now())
+                .roles(List.of(OwnerRoles.OWNER))
                 .build();
 
 
@@ -174,20 +206,21 @@ public class InitializeData implements ServletContextListener {
             ownerService.create(bartek);
             ownerService.create(zenek);
             ownerService.create(karol);
-
-            breedService.create(maineCoon);
-            breedService.create(siamese);
-            breedService.create(ragdoll);
-            breedService.create(sphynx);
-
-
-            catService.create(whiskers);
-            catService.create(shadow);
-            catService.create(snowball);
-            catService.create(cleo);
         } catch (Exception e) {
             System.out.println("elemnty juz w bazie ");
         }
+
+        breedService.create(maineCoon); // 208
+        breedService.create(siamese);
+        breedService.create(ragdoll);
+        breedService.create(sphynx);
+
+
+        catService.create(whiskers);
+        catService.create(shadow);
+        catService.create(snowball);
+        catService.create(cleo);
+
 
 //        DisplayData();
 
@@ -206,6 +239,12 @@ public class InitializeData implements ServletContextListener {
         });
         System.out.println();
 
+        displayBreeds();
+
+        displayOwners();
+    }
+
+    private void displayBreeds() {
         System.out.println("==================BREEDS====================");
         breedService.findAll().forEach(breed -> {
             System.out.println();
@@ -222,14 +261,18 @@ public class InitializeData implements ServletContextListener {
             }
         });
         System.out.println();
+    }
 
+    private void displayOwners() {
         System.out.println("==================OWNERS====================");
         ownerService.findAll().forEach(owner -> {
             System.out.println();
             System.out.println("Owner: " + owner.getName());
             System.out.println("Login: " + owner.getLogin());
+            System.out.println("Password: " + owner.getPassword());
             System.out.println("Salary: $" + owner.getSalary());
             System.out.println("Birth Date: " + owner.getBirthDate());
+            System.out.println("Roles: " + owner.getRoles());
             // Display the cats owned by this owner (if you have this relationship set up)
             List<Cat> catsOfOwner = catService.findByOwner(owner);
             if (catsOfOwner != null && !catsOfOwner.isEmpty()) {

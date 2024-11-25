@@ -7,7 +7,24 @@
         <feature>faces-4.0</feature>
         <feature>restfulWS-3.1</feature>
         <feature>persistence-3.1</feature>
+        <feature>enterpriseBeans-4.0</feature>
+        <feature>appSecurity-5.0</feature>
     </featureManager>
+
+    <application type="war" location="cat-app-1.0.war">
+        <application-bnd>
+            <security-role name="admin">
+                <group name="admin" access-id="group:jdbc/Cats/admin"/>
+                <run-as userid="admin-service"/>
+            </security-role>
+            <security-role name="owner">
+                <group name="owner" access-id="group:jdbc/Cats/owner"/>
+            </security-role>
+        </application-bnd>
+    </application>
+
+    <logging traceSpecification="com.ibm.ws.security.*=all" />
+
 
     <dataSource id="CatsDataSource" jndiName="jdbc/Cats">
         <jdbcDriver javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"

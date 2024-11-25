@@ -20,4 +20,6 @@ public class GetOwnerResponse {
     private Float salary;
     private String login;
 
+    private List<String> roles;
+
 }

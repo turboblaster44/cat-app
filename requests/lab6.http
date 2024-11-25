@@ -1,0 +1,23 @@
+//admin
+//YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+//Warrior
+//YWR2ZW50dXJlckBnYW1lLmNvbTppTG92ZUtpbGxpbmdEcmFnb25zJiE=
+
+
+
+// TESTING INSTRUCTION's USE CASES
+
+
+
+### PUT new breed as admin
+// @no-cookie-jar
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Content-Type: application/json
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+{
+  "name": "Oriental Shorthair",
+  "averageLifespan": 13,
+  "hypoallergenic": true
+}

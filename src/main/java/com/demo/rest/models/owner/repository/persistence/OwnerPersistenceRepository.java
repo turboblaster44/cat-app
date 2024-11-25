@@ -1,18 +1,21 @@
 package com.demo.rest.models.owner.repository.persistence;
 
 import com.demo.rest.models.breed.entity.Breed;
+import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.owner.entity.Owner;
 import com.demo.rest.models.owner.repository.api.OwnerRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Dependent
 public class OwnerPersistenceRepository implements OwnerRepository {
     private EntityManager em;
 
@@ -51,4 +54,15 @@ public class OwnerPersistenceRepository implements OwnerRepository {
     public void update(Owner entity) {
         em.merge(entity);
     }
+
+    @Override
+    public Optional<Owner> findByLogin(String login) {
+        try {
+            Owner owner = em.createQuery("SELECT o FROM Owner o WHERE o.login = :login", Owner.class)
+                    .setParameter("login", login)
+                    .getSingleResult();
+            return Optional.ofNullable(owner);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }    }
 }

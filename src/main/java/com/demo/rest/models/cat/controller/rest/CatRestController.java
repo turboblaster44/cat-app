@@ -7,13 +7,15 @@ import com.demo.rest.models.cat.dto.GetCatResponse;
 import com.demo.rest.models.cat.dto.GetCatsResponse;
 import com.demo.rest.models.cat.dto.PutCatRequest;
 import com.demo.rest.models.cat.service.CatService;
+import com.demo.rest.models.owner.entity.OwnerRoles;
 import com.demo.rest.utils.DtoFunctionFactory;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBAccessException;
+import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
@@ -21,8 +23,9 @@ import jakarta.ws.rs.core.UriInfo;
 import java.util.UUID;
 
 @Path("")
+@RolesAllowed(OwnerRoles.OWNER)//Secure implementation, not the interface
 public class CatRestController implements CatController {
-    private final CatService service;
+    private CatService service;
 
     private final DtoFunctionFactory factory;
 
@@ -37,10 +40,14 @@ public class CatRestController implements CatController {
     }
 
     @Inject
-    public CatRestController(CatService service, DtoFunctionFactory factory, UriInfo uriInfo) {
-        this.service = service;
+    public CatRestController(DtoFunctionFactory factory, UriInfo uriInfo) {
         this.factory = factory;
         this.uriInfo = uriInfo;
+    }
+
+    @EJB
+    public void setService(CatService service) {
+        this.service = service;
     }
 
     @Override
@@ -63,14 +70,14 @@ public class CatRestController implements CatController {
     @Override
     public void putCat(UUID breedId, UUID catId, PutCatRequest request) {
         try {
-            service.put(factory.requestToCat().apply(breedId, catId, request));
+            service.createForCallerPrincipal(factory.requestToCat().apply(breedId, catId, request));
             System.out.println("after create");
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(CatController.class, "getCat")
                     .build(catId)
                     .toString());
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (IllegalArgumentException ex) {
+        } catch (EJBException ex) {
             throw new BadRequestException(ex);
         }
     }
@@ -78,10 +85,34 @@ public class CatRestController implements CatController {
     @Override
     public void deleteCat(UUID id) {
         service.find(id).ifPresentOrElse(
-                entity -> service.deleteById(id),
+                entity -> {
+                    try {
+                        service.deleteById(id);
+                    } catch (EJBAccessException ex) {
+                        System.out.println("WARNING" + ex.getMessage() + ex);
+                        throw new ForbiddenException(ex.getMessage());
+                    }
+                },
                 () -> {
                     throw new NotFoundException();
                 }
         );
     }
+
+//    @Override
+//    public void patchCat(UUID id, PatchCatRequest request) {
+//        service.find(id).ifPresentOrElse(
+//                entity -> {
+//                    try {
+//                        service.update(factory.updateCat().apply(entity, request));
+//                    } catch (EJBAccessException ex) {
+//                        System.out.println("WARNING" + ex.getMessage() + ex);
+//                        throw new ForbiddenException(ex.getMessage());
+//                    }
+//                },
+//                () -> {
+//                    throw new NotFoundException();
+//                }
+//        );
+//    }
 }

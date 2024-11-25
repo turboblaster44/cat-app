@@ -1,9 +1,16 @@
-package com.demo.rest.models.owner.dto;
+package com.demo.rest.models.owner.model;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Singular;
+import lombok.ToString;
 
 import java.util.List;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -13,7 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 @EqualsAndHashCode
-public class GetOwnersResponse {
+public class OwnersModel {
+
     @Getter
     @Setter
     @Builder
@@ -22,15 +30,15 @@ public class GetOwnersResponse {
     @ToString
     @EqualsAndHashCode
     public static class Owner {
+
         private UUID id;
-        private String name;
-        private LocalDate birthDate;
-        private Float salary;
         private String login;
-        private List<String> roles;
 
     }
 
+    /**
+     * List of users.
+     */
     @Singular
     private List<Owner> owners;
 }

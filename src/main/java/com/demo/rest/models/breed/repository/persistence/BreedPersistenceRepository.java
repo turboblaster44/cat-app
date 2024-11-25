@@ -6,6 +6,7 @@ import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.repository.api.CatRepository;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@ApplicationScoped
+@Dependent
 public class BreedPersistenceRepository implements BreedRepository {
 
 
@@ -29,7 +30,7 @@ public class BreedPersistenceRepository implements BreedRepository {
 
     @Override
     public Optional<Breed> find(UUID id) {
-        return  Optional.ofNullable(em.find(Breed.class, id));
+        return Optional.ofNullable(em.find(Breed.class, id));
     }
 
     @Override

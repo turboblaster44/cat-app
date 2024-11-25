@@ -5,7 +5,11 @@ import com.demo.rest.models.breed.dto.GetBreedResponse;
 import com.demo.rest.models.breed.dto.GetBreedsResponse;
 import com.demo.rest.models.breed.dto.PutBreedRequest;
 import com.demo.rest.models.breed.service.BreedService;
+import com.demo.rest.models.owner.entity.OwnerRoles;
 import com.demo.rest.utils.DtoFunctionFactory;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ejb.EJB;
+import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.BadRequestException;
@@ -20,7 +24,7 @@ import java.util.UUID;
 
 @Path("")
 public class BreedRestController implements BreedController {
-    private final BreedService service;
+    private BreedService service;
 
     private final DtoFunctionFactory factory;
 
@@ -35,11 +39,15 @@ public class BreedRestController implements BreedController {
     }
 
     @Inject
-    public BreedRestController(BreedService service, DtoFunctionFactory factory, UriInfo uriInfo) {
+    public BreedRestController(DtoFunctionFactory factory, UriInfo uriInfo) {
         System.out.println("initing a controller");
-        this.service = service;
         this.factory = factory;
         this.uriInfo = uriInfo;
+    }
+
+    @EJB
+    public void setService(BreedService service) {
+        this.service = service;
     }
 
     @Override
@@ -58,18 +66,20 @@ public class BreedRestController implements BreedController {
     @Override
     public void putBreed(UUID id, PutBreedRequest request) {
         try {
+            System.out.println("IN put Breed");
             service.put(factory.requestToBreed().apply(id, request));
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(BreedController.class, "getBreed")
                     .build(id)
                     .toString());
             throw new WebApplicationException(Response.Status.CREATED);
-        } catch (IllegalArgumentException ex) {
+        } catch (EJBException ex) {
             throw new BadRequestException(ex);
         }
     }
 
     @Override
+    @RolesAllowed(OwnerRoles.ADMIN)//Secure implementation, not the interface
     public void deleteBreed(UUID id) {
         service.find(id).ifPresentOrElse(
                 entity -> service.delete(entity),

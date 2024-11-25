@@ -6,6 +6,7 @@ import com.demo.rest.models.breed.service.BreedService;
 import com.demo.rest.models.cat.model.CatsModel;
 import com.demo.rest.models.cat.service.CatService;
 import com.demo.rest.utils.ModelFunctionFactory;
+import jakarta.ejb.EJB;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -23,8 +24,8 @@ import java.util.UUID;
 @Named
 public class BreedView implements Serializable {
 
-    private final BreedService breedService;
-    private final CatService catService;
+    private BreedService breedService;
+    private CatService catService;
     private final ModelFunctionFactory factory;
 
 
@@ -41,13 +42,21 @@ public class BreedView implements Serializable {
 
 
     @Inject
-    public BreedView(BreedService breedService, ModelFunctionFactory factory, CatService catService) {
-        this.breedService = breedService;
+    public BreedView(ModelFunctionFactory factory) {
         this.factory = factory;
-        this.catService = catService;
 
     }
 
+    @EJB
+    public void setCatService(CatService service) {
+        this.catService = service;
+    }
+
+
+    @EJB
+    public void setBreedService(BreedService service) {
+        this.breedService = service;
+    }
 
     public void init() throws IOException {
         Optional<Breed> breed = breedService.find(id);
