@@ -1,14 +1,26 @@
 //admin
 //YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
 
-//Warrior
-//YWR2ZW50dXJlckBnYW1lLmNvbTppTG92ZUtpbGxpbmdEcmFnb25zJiE=
+//owner - albert
+//YWxiZXJ0OmFsYmVydA===
 
 
 
 // TESTING INSTRUCTION's USE CASES
 
 
+
+### PUT new breed as owner - error
+// @no-cookie-jar
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Content-Type: application/json
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+{
+  "name": "Oriental Shorthair",
+  "averageLifespan": 13,
+  "hypoallergenic": true
+}
 
 ### PUT new breed as admin
 // @no-cookie-jar
@@ -21,3 +33,117 @@ Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
   "averageLifespan": 13,
   "hypoallergenic": true
 }
+
+### GET created breed as admin
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### DELETE breed as owner - error
+// @no-cookie-jar
+DELETE http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+### DELETE breed as admin
+// @no-cookie-jar
+DELETE http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+//******************//player can view all weapon types
+
+### GET all breeds as owner - no role cant do it ( comment the auth)
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/breeds/
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+//******************//everyone can add a new player
+
+### PUT new Owner
+// @no-cookie-jar
+PUT http://localhost:9080/cat-app/api/owners/0c7d9ff4-f852-4d96-90ec-27c590d56830
+Content-Type: application/json
+
+{
+  "name": "janek",
+  "login": "janek",
+  "password": "janek",
+  "salary": "15.0",
+  "birthdate": "1990-01-01"
+}
+
+### GET all owners
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/owners/
+#Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+
+
+### GET all cats as admin
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/cats/
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### GET all cats as owner
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/cats/
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+//******************//admin can add and delete all elements
+
+### PUT new cat as admin
+// @no-cookie-jar
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+Content-Type: application/json
+
+{
+  "name": "Destroyer",
+  "weight": 13.5,
+  "color": "BLACK",
+  "ownerId": "45a3c22d-77d0-4571-9f4b-4de78b3e5796"
+}
+### GET created cat as admin
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+### DELETE created cat as owner
+// @no-cookie-jar
+DELETE http://localhost:9080/cat-app/api/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+### DELETE created cat as admin
+// @no-cookie-jar
+DELETE http://localhost:9080/cat-app/api/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWRtaW4tc2VydmljZTphZG1pbmFkbWlu
+
+
+//******************// player can add elements
+
+### PUT new cat as owner
+// @no-cookie-jar
+PUT http://localhost:9080/cat-app/api/breeds/86b6b195-901d-4796-870d-b2719362c678/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+Content-Type: application/json
+
+{
+  "name": "Destroyer",
+  "weight": 13.5,
+  "color": "BLACK"
+}
+
+### GET created cat as owner
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/cats/385ec833-f47f-45c8-bdb6-93e1ffa3851a
+Authorization: Basic YWxiZXJ0OmFsYmVydA==
+
+
+### GET created weapon as player (all his weapons)
+// @no-cookie-jar
+GET http://localhost:9080/jakarta-lab-app-1.0/api/weapons
+Authorization: Basic YWR2ZW50dXJlckBnYW1lLmNvbTppTG92ZUtpbGxpbmdEcmFnb25zJiE=
+
+### GET all cats as owner
+// @no-cookie-jar
+GET http://localhost:9080/cat-app/api/cats/
+Authorization: Basic YWxiZXJ0OmFsYmVydA==

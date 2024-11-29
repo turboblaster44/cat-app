@@ -23,7 +23,17 @@ public class GetCatResponse {
     public static class Breed {
         private UUID id;
         private String name;
-
+    }
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @ToString
+    @EqualsAndHashCode
+    public static class Owner {
+        private UUID id;
+        private String name;
     }
 
     private UUID id;
@@ -32,4 +42,5 @@ public class GetCatResponse {
     private Float weight;
 
     private Breed breed;
+    private Owner owner;
 }

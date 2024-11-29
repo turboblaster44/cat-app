@@ -28,7 +28,7 @@ public class CatService {
     private final SecurityContext securityContext;
 
     @Inject
-    public CatService(CatRepository catRepository,  @SuppressWarnings("CdiInjectionPointsInspection") SecurityContext securityContext, OwnerRepository ownerRepository) {
+    public CatService(CatRepository catRepository, @SuppressWarnings("CdiInjectionPointsInspection") SecurityContext securityContext, OwnerRepository ownerRepository) {
         this.catRepository = catRepository;
         this.securityContext = securityContext;
         this.ownerRepository = ownerRepository;
@@ -72,6 +72,7 @@ public class CatService {
             //return findAll();
             return catRepository.findAll();
         }
+        System.out.println(securityContext.getCallerPrincipal().getName());
         Owner owner = ownerRepository.findByLogin(securityContext.getCallerPrincipal().getName())
                 .orElseThrow(IllegalStateException::new);
         return findAll(owner);
@@ -97,12 +98,16 @@ public class CatService {
 
     @RolesAllowed(OwnerRoles.OWNER)
     public void createForCallerPrincipal(Cat cat) {
-        Owner owner = ownerRepository.findByLogin(securityContext.getCallerPrincipal().getName())
-                .orElseThrow(IllegalStateException::new);
-
-        cat.setOwner(owner);
-        create(cat);
+        System.out.println("**********************");
+        System.out.println(cat);
+        if (cat.getOwner().getId() == null) {
+            Owner owner = ownerRepository.findByLogin(securityContext.getCallerPrincipal().getName())
+                    .orElseThrow(IllegalStateException::new);
+            cat.setOwner(owner);
+        }
+        put(cat);
     }
+
     public void put(Cat cat) {
         if (catRepository.find(cat.getId()).isEmpty())
             catRepository.create(cat);

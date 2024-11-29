@@ -13,9 +13,9 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode
 public class PutOwnerRequest {
-    private UUID id;
     private String name;
     private LocalDate birthDate;
     private Float salary;
     private String login;
+    private String password;
 }

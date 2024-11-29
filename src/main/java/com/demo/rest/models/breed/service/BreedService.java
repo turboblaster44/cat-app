@@ -36,7 +36,7 @@ public class BreedService {
         return breedRepository.find(id);
     }
 
-    @PermitAll
+    @RolesAllowed(OwnerRoles.OWNER)
     public List<Breed> findAll() {
         return breedRepository.findAll();
     }

@@ -79,7 +79,7 @@ public class CatPersistenceRepository implements CatRepository {
 
     @Override
     public List<Cat> findByOwner(Owner owner) {
-        return em.createQuery("select w from Cat w where w.owner.id = :owner", Cat.class)
+        return em.createQuery("select w from Cat w where w.owner = :owner", Cat.class)
                 .setParameter("owner", owner)
                 .getResultList();
     }

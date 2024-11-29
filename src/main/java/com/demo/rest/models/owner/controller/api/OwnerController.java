@@ -29,7 +29,7 @@ public interface OwnerController {
     @PUT
     @Path("/owners/{id}")
     @Consumes({MediaType.APPLICATION_JSON})
-    void putOwner(@PathParam("id") UUID id, PutBreedRequest request);
+    void putOwner(@PathParam("id") UUID id, PutOwnerRequest request);
 
     /**
      * @param id profession's id

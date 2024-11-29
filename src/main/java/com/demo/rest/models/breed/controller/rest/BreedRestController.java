@@ -9,13 +9,11 @@ import com.demo.rest.models.owner.entity.OwnerRoles;
 import com.demo.rest.utils.DtoFunctionFactory;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.ejb.EJB;
+import jakarta.ejb.EJBAccessException;
 import jakarta.ejb.EJBException;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
@@ -52,7 +50,11 @@ public class BreedRestController implements BreedController {
 
     @Override
     public GetBreedsResponse getBreeds() {
-        return factory.breedsToResponse().apply(service.findAll());
+        try {
+            return factory.breedsToResponse().apply(service.findAll());
+        }catch (EJBException ex){
+            throw new ForbiddenException(ex);
+        }
     }
 
 
@@ -66,13 +68,14 @@ public class BreedRestController implements BreedController {
     @Override
     public void putBreed(UUID id, PutBreedRequest request) {
         try {
-            System.out.println("IN put Breed");
             service.put(factory.requestToBreed().apply(id, request));
             response.setHeader("Location", uriInfo.getBaseUriBuilder()
                     .path(BreedController.class, "getBreed")
                     .build(id)
                     .toString());
             throw new WebApplicationException(Response.Status.CREATED);
+        } catch (EJBAccessException ex) {
+            throw new ForbiddenException(ex);
         } catch (EJBException ex) {
             throw new BadRequestException(ex);
         }

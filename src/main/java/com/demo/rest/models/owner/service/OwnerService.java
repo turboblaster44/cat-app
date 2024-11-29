@@ -44,7 +44,7 @@ public class OwnerService {
     }
 
 //    @RolesAllowed(OwnerRoles.ADMIN)
-    @PermitAll
+    @RolesAllowed(OwnerRoles.ADMIN)
     public List<Owner> findAll() {
         return repository.findAll();
     }

@@ -38,7 +38,7 @@ import jakarta.security.enterprise.identitystore.Pbkdf2PasswordHash;
 @DatabaseIdentityStoreDefinition(
         dataSourceLookup = "jdbc/Cats",
         callerQuery = "select password from owners where login = ?",
-        groupsQuery = "select role from owners__roles where id = (select id from owners where login = ?)",
+        groupsQuery = "select role from owner__roles where id = (select id from owners where login = ?)",
         hashAlgorithm = Pbkdf2PasswordHash.class
 )
 public class AuthConfig {

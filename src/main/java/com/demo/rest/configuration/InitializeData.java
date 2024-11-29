@@ -48,7 +48,7 @@ public class InitializeData implements ServletContextListener {
 //    private final static Path imageDir = Paths.get("imageDir");
 
     @Inject
-        private SecurityContext securityContext;
+    private SecurityContext securityContext;
 
     @EJB
     public void setOwnerService(OwnerService service) {
@@ -92,12 +92,6 @@ public class InitializeData implements ServletContextListener {
     @PostConstruct
     @SneakyThrows
     private void init() {
-//        initImageDir(imageDir);
-//        displayOwners();
-        System.out.println("there is the owner service");
-        System.out.println(ownerService.findAll());
-
-
         Owner albert = Owner.builder()
                 .id(UUID.fromString("45a3c22d-77d0-4571-9f4b-4de78b3e5796"))
                 .name("albert")
@@ -200,26 +194,27 @@ public class InitializeData implements ServletContextListener {
                 .breed(sphynx)
                 .owner(karol)
                 .build();
+        if (ownerService.findByLogin("albert").isEmpty()) {
+            try {
+                ownerService.create(albert);
+                ownerService.create(bartek);
+                ownerService.create(zenek);
+                ownerService.create(karol);
 
-        try {
-            ownerService.create(albert);
-            ownerService.create(bartek);
-            ownerService.create(zenek);
-            ownerService.create(karol);
-        } catch (Exception e) {
-            System.out.println("elemnty juz w bazie ");
+                breedService.create(maineCoon); // 208
+                breedService.create(siamese);
+                breedService.create(ragdoll);
+                breedService.create(sphynx);
+
+
+                catService.create(whiskers);
+                catService.create(shadow);
+                catService.create(snowball);
+                catService.create(cleo);
+            } catch (Exception e) {
+                System.out.println("elemnty juz w bazie ");
+            }
         }
-
-        breedService.create(maineCoon); // 208
-        breedService.create(siamese);
-        breedService.create(ragdoll);
-        breedService.create(sphynx);
-
-
-        catService.create(whiskers);
-        catService.create(shadow);
-        catService.create(snowball);
-        catService.create(cleo);
 
 
 //        DisplayData();
