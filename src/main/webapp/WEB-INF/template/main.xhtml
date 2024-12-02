@@ -25,6 +25,18 @@
             <header class="mb-4 mt-4">
                 <h:graphicImage style="width: 200px; object-fit: cover; height: 200px;"  class="me-3" value="https://img.freepik.com/free-photo/cute-cats-relaxing-indoors_23-2150692683.jpg"/>
                 <h1>Cats</h1>
+                <h:form styleClass="container d-flex  align-items-center justify-content-end"
+                        rendered="#{facesContext.externalContext.userPrincipal != null}">
+                    Logged: <h:outputText value="#{facesContext.externalContext.userPrincipal.name}"/>
+                    <h:commandButton styleClass="btn btn-link" value="Logout"
+                                     action="#{ownerLogout.logoutAction()}"/>
+                </h:form>
+
+                <h:form styleClass="container d-flex  align-items-center justify-content-end"
+                        rendered="#{facesContext.externalContext.userPrincipal == null}">
+                    <h:link styleClass="nav-link"
+                            outcome="/authentication/custom/login.xhtml">Login</h:link>
+                </h:form>
             </header>
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -37,6 +49,12 @@
                             <h:link styleClass="nav-link"
                                     outcome="/breed/breed_list.xhtml">Breeds</h:link>
                         </li>
+                        <h:panelGroup rendered="#{facesContext.externalContext.isUserInRole('admin')}">
+                            <li class="nav-item">
+                                <h:link styleClass="nav-link"
+                                        outcome="/owner/owner_list.xhtml">Players</h:link>
+                            </li>
+                        </h:panelGroup>
                     </ul>
                 </div>
             </nav>

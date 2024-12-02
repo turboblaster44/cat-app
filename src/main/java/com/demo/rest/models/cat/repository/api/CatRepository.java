@@ -14,5 +14,6 @@ public interface CatRepository extends Repository<Cat, UUID> {
     Optional<Cat> findByIdAndOwner(UUID id, Owner owner);
     List<Cat> findByBreed(UUID id);
     List<Cat> findByOwner(Owner owner);
+    List<Cat> findByBreedAndOwner(UUID id, Owner owner);
 
 }

@@ -75,6 +75,11 @@ public class OwnerService {
     }
 
     @RolesAllowed(OwnerRoles.ADMIN)
+    public void delete(UUID id) {
+        repository.deleteById(id);
+    }
+
+    @RolesAllowed(OwnerRoles.ADMIN)
     public void update(Owner owner) {
         repository.update(owner);
     }

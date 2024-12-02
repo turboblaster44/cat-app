@@ -63,7 +63,7 @@ public class CatEdit implements Serializable {
         if (cat.isPresent()) {
             this.cat = factory.catToEditModel().apply(cat.get());
         } else {
-            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "cat not found");
+            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "cat not found or youre not the owner");
         }
     }
 

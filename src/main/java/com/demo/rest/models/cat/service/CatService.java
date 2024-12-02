@@ -37,7 +37,9 @@ public class CatService {
 
     @RolesAllowed(OwnerRoles.OWNER)
     public Optional<Cat> find(UUID id) {
-        return catRepository.find(id);
+        Optional<Cat> optCat = catRepository.find(id);
+        checkAdminRoleOrOwner(optCat);
+        return optCat;
     }
 
     @RolesAllowed(OwnerRoles.OWNER)
@@ -45,10 +47,12 @@ public class CatService {
         return catRepository.findByIdAndOwner(id, owner);
     }
 
-
     @RolesAllowed(OwnerRoles.OWNER)
     public List<Cat> findByBreedId(UUID id) {
-        return catRepository.findByBreed(id);
+        if (securityContext.isCallerInRole(OwnerRoles.ADMIN)) {
+            return catRepository.findByBreed(id);
+        }
+        return catRepository.findByBreedAndOwner(id, ownerRepository.findByLogin(securityContext.getCallerPrincipal().getName()).get());
     }
 
     @RolesAllowed(OwnerRoles.OWNER)
@@ -98,7 +102,6 @@ public class CatService {
 
     @RolesAllowed(OwnerRoles.OWNER)
     public void createForCallerPrincipal(Cat cat) {
-        System.out.println("**********************");
         System.out.println(cat);
         if (cat.getOwner().getId() == null) {
             Owner owner = ownerRepository.findByLogin(securityContext.getCallerPrincipal().getName())

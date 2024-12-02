@@ -40,7 +40,7 @@
 
                 </div>
 
-                <h:dataTable value="#{breedView.cats.cats}" var="cat"
+                <h:dataTable id="catTable" value="#{breedView.cats.cats}" var="cat"
                              styleClass="table align-middle mb-0 bg-white" headerClass="bg-light">
 
                     <h:column>
@@ -66,14 +66,16 @@
                         <f:facet name="header">Delete</f:facet>
                         <h:form>
                             <h:commandButton styleClass="btn" value="Delete"
-                                             action="#{breedView.deleteCat(cat)}"/>
+                                             action="#{breedView.deleteCat(cat)}">
+                                <f:ajax execute="@this" render=":catTable"/>
+                            </h:commandButton>
                         </h:form>
                     </h:column>
 
-<!--                    <f:facet name="footer">-->
-<!--                        <h:button styleClass="btn" outcome="/weapontype/weapontype_create__basic.xhtml"-->
-<!--                                  value="Create new weapontype"/>-->
-<!--                    </f:facet>-->
+                    <!--                    <f:facet name="footer">-->
+                    <!--                        <h:button styleClass="btn" outcome="/weapontype/weapontype_create__basic.xhtml"-->
+                    <!--                                  value="Create new weapontype"/>-->
+                    <!--                    </f:facet>-->
                 </h:dataTable>
 
             </div>

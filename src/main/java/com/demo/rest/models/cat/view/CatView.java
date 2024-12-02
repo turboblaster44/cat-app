@@ -4,6 +4,7 @@ import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.cat.model.CatModel;
 import com.demo.rest.models.cat.service.CatService;
 import com.demo.rest.utils.ModelFunctionFactory;
+import jakarta.ejb.EJBAccessException;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
@@ -40,11 +41,17 @@ public class CatView implements Serializable {
 
 
     public void init() throws IOException {
-        Optional<Cat> cat = catService.find(id);
-        if (cat.isPresent()) {
-            this.cat = factory.catToModelFunction().apply(cat.get());
-        } else {
-            FacesContext.getCurrentInstance().getExternalContext().responseSendError(HttpServletResponse.SC_NOT_FOUND, "cat not found");
+        try {
+            Optional<Cat> cat = catService.find(id);
+            if (cat.isPresent()) {
+                this.cat = factory.catToModel().apply(cat.get());
+            } else {
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .responseSendError(HttpServletResponse.SC_NOT_FOUND, "Cat not found");
+            }
+        } catch (EJBAccessException e) {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            facesContext.getExternalContext().responseSendError(HttpServletResponse.SC_FORBIDDEN, "Access Denied");
         }
     }
 

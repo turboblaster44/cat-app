@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 @ConversationScoped
 @Named
-@Log
 @NoArgsConstructor(force = true)
 public class CatCreate implements Serializable {
 

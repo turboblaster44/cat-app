@@ -10,7 +10,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class ModelFunctionFactory {
 
-    public CatToModelFunction catToModelFunction() {
+    public CatToModelFunction catToModel() {
         return new CatToModelFunction();
     }
 

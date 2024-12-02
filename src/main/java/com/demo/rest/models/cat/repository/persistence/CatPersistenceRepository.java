@@ -28,7 +28,7 @@ public class CatPersistenceRepository implements CatRepository {
 
     @Override
     public Optional<Cat> find(UUID id) {
-        return  Optional.ofNullable(em.find(Cat.class, id));
+        return Optional.ofNullable(em.find(Cat.class, id));
     }
 
     @Override
@@ -81,6 +81,14 @@ public class CatPersistenceRepository implements CatRepository {
     public List<Cat> findByOwner(Owner owner) {
         return em.createQuery("select w from Cat w where w.owner = :owner", Cat.class)
                 .setParameter("owner", owner)
+                .getResultList();
+    }
+
+    @Override
+    public List<Cat> findByBreedAndOwner(UUID breedId, Owner owner) {
+        return em.createQuery("select w from Cat w where w.owner = :owner and w.breed.id =:breedId", Cat.class)
+                .setParameter("owner", owner)
+                .setParameter("breedId", breedId)
                 .getResultList();
     }
 

@@ -10,7 +10,7 @@
 
         <article class="text--justified">
             <header><h2>Breeds</h2></header>
-            <h:dataTable value="#{breedList.breeds.breeds}" var="breed"
+            <h:dataTable id="breedTable" value="#{breedList.breeds.breeds}" var="breed"
                          styleClass="table align-middle mb-0 bg-white" headerClass="bg-light">
 
                 <h:column>
@@ -25,17 +25,20 @@
                     </h:link>
                 </h:column>
 
-                <h:column>
+                <h:column rendered="#{facesContext.externalContext.isUserInRole('admin')}">
                     <f:facet name="header">Delete</f:facet>
                     <h:form>
                         <h:commandButton styleClass="btn" value="Delete"
-                                         action="#{breedList.deleteAction(breed)}"/>
+                                         action="#{breedList.deleteAction(breed)}">
+                            <f:ajax execute="@this" render=":breedTable"/>
+                        </h:commandButton>
                     </h:form>
                 </h:column>
 
                 <f:facet name="footer">
                     <h:button styleClass="btn" outcome="/cat/cat_create.xhtml"
                               value="Add new cat"/>
+
                 </f:facet>
             </h:dataTable>
         </article>

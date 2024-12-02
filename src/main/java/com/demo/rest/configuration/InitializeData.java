@@ -92,6 +92,16 @@ public class InitializeData implements ServletContextListener {
     @PostConstruct
     @SneakyThrows
     private void init() {
+        Owner admin = Owner.builder()
+                .id(UUID.fromString("0cc37711-5496-474c-b22c-ea0553d29979"))
+                .name("admin")
+                .login("admin")
+                .password("admin")
+                .salary(0.0f)
+                .birthDate(LocalDate.of(2004, 1, 1))
+                .roles(List.of(OwnerRoles.ADMIN, OwnerRoles.OWNER))
+                .build();
+
         Owner albert = Owner.builder()
                 .id(UUID.fromString("45a3c22d-77d0-4571-9f4b-4de78b3e5796"))
                 .name("albert")
@@ -194,9 +204,11 @@ public class InitializeData implements ServletContextListener {
                 .breed(sphynx)
                 .owner(karol)
                 .build();
+
         if (ownerService.findByLogin("albert").isEmpty()) {
             try {
                 ownerService.create(albert);
+                ownerService.create(admin);
                 ownerService.create(bartek);
                 ownerService.create(zenek);
                 ownerService.create(karol);
