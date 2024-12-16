@@ -15,6 +15,7 @@ public class CatToResponseFunction implements Function<Cat, GetCatResponse> {
                 .name(entity.getName())
                 .weight(entity.getWeight())
                 .color(entity.getColor())
+                .version(entity.getVersion())
                 .breed(GetCatResponse.Breed.builder()
                         .id(entity.getBreed().getId())
                         .name(entity.getBreed().getName())

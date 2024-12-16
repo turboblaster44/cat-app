@@ -43,4 +43,6 @@ public class GetCatResponse {
 
     private Breed breed;
     private Owner owner;
+
+    private Long version;
 }

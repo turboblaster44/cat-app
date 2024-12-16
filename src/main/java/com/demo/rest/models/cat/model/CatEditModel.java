@@ -16,4 +16,5 @@ public class CatEditModel {
     private CatColor color;
     private Float weight;
     private OwnerModel owner;
+    private Long version;
 }

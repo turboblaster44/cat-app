@@ -16,6 +16,34 @@
             <h:form styleClass="container" onreset="onReset()" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-4 p-2">
+                        <h:messages/>
+                    </div>
+                </div>
+
+                <h:panelGroup rendered="#{not empty catEdit.unsavedCat}">
+                    <div class="row">
+                        <div class="col-12 p-2">
+                            <h:outputText value="You attempted to update the following data:" styleClass="text-danger" />
+                            <ul>
+                                <li>
+                                    <strong>Name:</strong>
+                                    <h:outputText value="#{catEdit.unsavedCat.name}" />
+                                </li>
+                                <li>
+                                    <strong>Damage:</strong>
+                                    <h:outputText value="#{catEdit.unsavedCat.color}" />
+                                </li>
+                                <li>
+                                    <strong>Value:</strong>
+                                    <h:outputText value="#{catEdit.unsavedCat.weight}" />
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </h:panelGroup>
+
+                <div class="row">
+                    <div class="col-4 p-2">
                         <div class="form-outline">
                             <h:inputText id="name" value="#{catEdit.cat.name}" styleClass="form-control"/>
                             <h:outputLabel for="name" value="Name:" styleClass="form-label"/>

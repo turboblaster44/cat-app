@@ -14,7 +14,11 @@ public class CatsToModelFunction implements Function<List<Cat>, CatsModel> {
                         .map(cat -> CatsModel.Cat.builder()
                                 .id(cat.getId())
                                 .name(cat.getName())
+                                .version(cat.getVersion())
+                                .creationDateTime(cat.getCreationDateTime())
+                                .updateDateTime(cat.getUpdateDateTime())
                                 .build())
+
                         .toList())
                 .build();
     }

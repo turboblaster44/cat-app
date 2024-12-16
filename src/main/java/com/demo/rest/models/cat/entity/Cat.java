@@ -1,5 +1,6 @@
 package com.demo.rest.models.cat.entity;
 
+import com.demo.rest.entity.VersionAndCreationDateAuditable;
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.owner.entity.Owner;
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity
 @Table(name = "cats")
-public class Cat implements Serializable {
+public class Cat extends VersionAndCreationDateAuditable implements Serializable {
 
     @Id
     private UUID id;

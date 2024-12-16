@@ -21,6 +21,7 @@ public class CatToEditModelFunction implements Function<Cat, CatEditModel>, Seri
                 .color(entity.getColor())
                 .weight(entity.getWeight())
                 .owner(ownerToModelFunction.apply(entity.getOwner()))
+                .version(entity.getVersion())
                 .build();
     }
 }

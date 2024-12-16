@@ -3,6 +3,7 @@ package com.demo.rest.models.owner.repository.persistence;
 import com.demo.rest.models.breed.entity.Breed;
 import com.demo.rest.models.cat.entity.Cat;
 import com.demo.rest.models.owner.entity.Owner;
+import com.demo.rest.models.owner.entity.Owner_;
 import com.demo.rest.models.owner.repository.api.OwnerRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.Dependent;
@@ -10,6 +11,9 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +36,11 @@ public class OwnerPersistenceRepository implements OwnerRepository {
 
     @Override
     public List<Owner> findAll() {
-        return em.createQuery("select w from Owner w", Owner.class).getResultList();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Owner> query = cb.createQuery(Owner.class);
+        Root<Owner> root = query.from(Owner.class);
+        query.select(root);
+        return em.createQuery(query).getResultList();
     }
 
     @Override
@@ -58,10 +66,12 @@ public class OwnerPersistenceRepository implements OwnerRepository {
     @Override
     public Optional<Owner> findByLogin(String login) {
         try {
-            Owner owner = em.createQuery("SELECT o FROM Owner o WHERE o.login = :login", Owner.class)
-                    .setParameter("login", login)
-                    .getSingleResult();
-            return Optional.ofNullable(owner);
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Owner> query = cb.createQuery(Owner.class);
+            Root<Owner> root = query.from(Owner.class);
+            query.select(root)
+                    .where(cb.equal(root.get(Owner_.login), login));  // Accessing login using Owner_
+            return Optional.of(em.createQuery(query).getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
         }    }

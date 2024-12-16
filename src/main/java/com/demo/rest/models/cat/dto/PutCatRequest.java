@@ -17,5 +17,5 @@ public class PutCatRequest {
     private CatColor color;
     private Float weight;
     private UUID ownerId;
-
+    private Long version;
 }
